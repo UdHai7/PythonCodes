@@ -9,6 +9,11 @@ import httplib
 
 import os
 import sys
+
+jasper_server = os.environ.get('JASPER_SERVER')
+jasper_user = os.environ.get('JASPER_USER')
+jasper_password = os.environ.get('JASPER_PASSWORD')
+jasper_folderpath = os.environ.get('JASPER_FOLDERPATH')
   
 def report_download(repo_path, folder=None, jasper_url=None, auth=None, user=None, password=None):
   '''
@@ -32,13 +37,13 @@ def report_download(repo_path, folder=None, jasper_url=None, auth=None, user=Non
   # double checking the optional data in case this function is called from another module.
   # You may also want to convert them to strings via str() 
   if not jasper_url:
-    jasper_url = 'http://52.76.49.12/jasperserver-pro/' 
+    jasper_url = jasper_server
   if not user:
-    user = 'superuser'
+    user = jasper_user
   if not password:
-    password = 'Ivy12345'
+    password = jasper_password
   if not folder:
-    folder = "/organizations/organization_1/reports/DMS/Report/005_R5_PSKU_Billed"
+    folder = jasper_folderpath
   else:
     # stripping trailing slashes
     folder = folder.rstrip('/')
