@@ -20,7 +20,7 @@ con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 cur = con.cursor()
 try:
 	# for log out existing users
-	query = "select * from STV_SESSIONS where db_name = '" + mart_db_name	 + "'"
+	query = "select pid, trim(user_name) as user, starttime, query , substring(query,1,20), status from stv_recents where status='Running'"
 	print "current sessions query: ", query
 	cur.execute(query)
 	records = cur.fetchall()
