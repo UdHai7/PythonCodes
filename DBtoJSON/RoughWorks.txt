@@ -1,0 +1,47 @@
+server = 'msdb2.ivy-support.com'
+database = 'IvyCPG_Carlsberg'
+username = 'IvyCPG_Carlsberg_datauser'
+password = 'IvyCPG_Carlsberg_datauser25'
+driver= '/home/udhai/Shared_Win/msodbcsql-11.0.2270.0'
+connstr = pyodbc.connect('DRIVER='+driver+';PORT=1433;SERVER='+server+';PORT=1443;DATABASE='+database+';UID='+username+';PWD='+ password)
+
+
+tsql -S msdb2.ivy-support.com -U IvyCPG_Carlsberg_datauser -P IvyCPG_Carlsberg_datauser25
+
+select * from IvyCPG_Carlsberg.dbo.SADM_Users
+go
+
+
+connstr = 'DRIVER={SQL Server};SERVER=msdb2.ivy-support.com;DATABASE=IvyCPG_Carlsberg;'
+conn = pyodbc.connect(connstr)
+cursor = conn.cursor()
+
+
+#server = 'msdb2.ivy-support.com'
+database = 'IvyCPG_Carlsberg'
+username = 'IvyCPG_Carlsberg_datauser'
+password = 'IvyCPG_Carlsberg_datauser25'
+driver= '{SQL Server}'
+conn = pyodbc.connect('DRIVER='+driver+';PORT=1433;SERVER='+server+';PORT=1443;DATABASE='+database+';UID='+username+';PWD='+ password)
+#conn = pyodbc.connect(connstr)
+cursor = conn.cursor()
+
+
+select DISTINCT 
+IH.SIH_ARTR_Id as RetId
+,ARTR.ARTR_Code as RetCode
+,ARTR.ARTR_Name as RetName
+,SUM(ID.SID_Qty) as InvQty
+,SUM(ID.SID_Line_Value) as InvValue 
+from AppData_Sales_Invoice_Header IH
+inner join AppData_Sales_Invoice_Detail ID on IH.SIH_Id=ID.SID_SIH_ID
+INNER JOIN ADM_Retailer ARTR on ARTR.ARTR_Id=IH.SIH_ARTR_Id
+GROUP BY IH.SIH_ARTR_Id,ARTR.ARTR_Code,ARTR.ARTR_Name
+
+
+import json
+class DecimalEncoder(json.JSONEncoder):
+     def default(self, obj):
+         if isinstance(obj, Decimal):
+             return "%.2f" % obj
+         return json.JSONEncoder.default(self, obj)
