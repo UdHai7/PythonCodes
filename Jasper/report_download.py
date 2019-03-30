@@ -153,4 +153,4 @@ if __name__ == '__main__':
   try:
     report_download(**vars(args))
   except Exception as e:
-    logging.error('Exception in report_upload(): %s' % e) 
+    logging.error('Exception in report_upload(): %s' % e)
